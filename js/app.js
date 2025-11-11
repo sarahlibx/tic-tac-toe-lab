@@ -69,6 +69,23 @@ const render = () => {
     messageEl.textContent = updateMessage();
 }
 
+const handleClick = (e) => {
+    const squareIndex = Array.from(squareEls).indexOf(e.target);
+
+    if(board[squareIndex] !== '' || winner === true) return;
+
+    placePiece(squareIndex);
+}
+
+const placePiece = (index) => {
+    board[index] = turn;
+    console.log(board);
+}
+
+const checkForWinner = () => {
+    if()
+}
+
 const init = () => {
     render();
 }
@@ -76,6 +93,7 @@ const init = () => {
 init();
 
 /*----------------------------- Event Listeners -----------------------------*/
-
-
+squareEls.forEach((square) => {
+    square.addEventListener('click', handleClick);
+});
 
