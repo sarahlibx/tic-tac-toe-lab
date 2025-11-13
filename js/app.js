@@ -121,5 +121,6 @@ squareEls.forEach((square) => {
 });
 
 resetBtnEl.addEventListener('click', init);
+/* wanted to figure out how to hide/unhide the reset button once the game was over, but ran out of time! */
 
 init();
