@@ -29,15 +29,16 @@ const winningCombos = [
 ];
 
 /*---------------------------- Variables (state) ----------------------------*/
-let board = ['', '', '', '', '', '', '', '', ''];
-let turn = 'X';
-let winner = false;
-let tie = false;
+let board;
+let turn;
+let winner;
+let tie;
 
 /*------------------------ Cached Element References ------------------------*/
 
 const squareEls = document.querySelectorAll('.sqr');
 const messageEl = document.getElementById('message');
+const resetBtnEl = document.getElementById('reset');
 
 /*-------------------------------- Functions --------------------------------*/
 
@@ -56,17 +57,17 @@ const updateBoard = () => {
 
 const updateMessage = () => {
     if(winner === false && tie === true) {
-        return 'It is a tie!';
+        messageEl.textContent = 'It is a tie!';
     } else if (winner === false && tie === false) {
-        return `It's ${turn}'s turn!`;
+        messageEl.textContent = `It's ${turn}'s turn!`;
     } else {
-        return `Congrats! ${winner} is the winner!`;
+        messageEl.textContent = `Congrats! ${winner} is the winner!`;
     }
 }
 
 const render = () => {
     updateBoard();
-    messageEl.textContent = updateMessage();
+    updateMessage();
 }
 
 const handleClick = (e) => {
@@ -75,25 +76,50 @@ const handleClick = (e) => {
     if(board[squareIndex] !== '' || winner === true) return;
 
     placePiece(squareIndex);
+    checkForWinner();
+    checkForTie();
+    switchPlayerTurn();
+    render();
 }
 
 const placePiece = (index) => {
     board[index] = turn;
-    console.log(board);
 }
 
 const checkForWinner = () => {
-    if()
-}
+    for(let combo of winningCombos) {
+        const [a, b, c] = combo;
+        if(board[a] && board[a] === board[b] && board[b] === board[c]) {
+            winner = board[a];
+            return;
+        }
+    }
+    winner = false;
+};
+
+const checkForTie = () => {
+    if (winner) return;
+    tie = board.every(square => square !== '');
+};
+
+const switchPlayerTurn = () => {
+    if (winner) return;
+    turn = turn === 'X' ? 'O' : 'X';
+};
 
 const init = () => {
+    board = ['', '', '', '', '', '', '', '', ''];
+    turn = 'X';
+    winner = false;
+    tie = false;    
     render();
-}
-
-init();
+};
 
 /*----------------------------- Event Listeners -----------------------------*/
 squareEls.forEach((square) => {
     square.addEventListener('click', handleClick);
 });
 
+resetBtnEl.addEventListener('click', init);
+
+init();
